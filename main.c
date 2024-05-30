@@ -8,13 +8,13 @@ void printArray(int *a, int n) {
     printf("\n");
 }
 
-void inserisci_ordinato(int arr[], int *n, int key) {
+void inserisci_ordinato(int *arr, int *size, int value) {
     int i;
-    for (i=(*n)-1; (i >= 0 && arr[i] > key); i--)
-        arr[i+1] = arr[i];
-
-    arr[i+1] = key;
-    (*n)++;
+    for (i = *size - 1; (i >= 0 && arr[i] > value); i--) {
+        arr[i + 1] = arr[i];
+    }
+    arr[i + 1] = value;
+    (*size)++;
 }
 
 int controlloPrime(int *primes, int n) {
@@ -39,16 +39,26 @@ int ifNotExist(int *arr, int n, int target) {
 }
 
 void CalcoloFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n, int limit) {
-    int k;
-    for(int a=0, i=0;notprimes[i]<m && i<i2;a=0,i++) {
-        for(k=1;a<limit;k++) {
-            a=(m*k)+notprimes[i];
-            if(controlloPrime(primes,a)) {
-                inserisci_ordinato(primes,&i1,a);
-                if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
-                (*foundPrimes)++;
+    int k, a, i;
+
+    for (i = 0; notprimes[i] < m && i < i2; i++) {
+        a = 0;
+        k = 1;
+        
+        while (a < limit) {
+            a = (m * k) + notprimes[i];
+            k++;
+
+            if (controlloPrime(primes, a)) {
+                if (!ifNotExist(primes, i1, a)) {
+                    inserisci_ordinato(primes, &i1, a);
+                    (*foundPrimes)++;
+                }
+            } 
+
+            if (!ifNotExist(notprimes, i2, a)) {
+                inserisci_ordinato(notprimes, &i2, a);
             }
-            else if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
         }
     }
 }
