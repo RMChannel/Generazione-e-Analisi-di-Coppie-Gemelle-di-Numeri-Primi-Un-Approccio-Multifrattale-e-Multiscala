@@ -8,14 +8,31 @@ void printArray(int *a, int n) {
     printf("\n");
 }
 
-void inserisci_ordinato(int *arr, int *size, int value) {
-    int i;
-    for (i = *size - 1; (i > 0 && arr[i] > value); i--) {
-        arr[i + 1] = arr[i];
+#include <stdlib.h>
+
+int binary_search(int *arr, int low, int high, int value) {
+    while (low < high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == value) {
+            return mid;
+        } else if (arr[mid] < value) {
+            low = mid + 1;
+        } else {
+            high = mid;
+        }
     }
-    arr[i + 1] = value;
+    return low;
+}
+
+void inserisci_ordinato(int *arr, int *size, int value) {
+    int i = binary_search(arr, 0, *size, value);
+    for (int j = *size; j > i; j--) {
+        arr[j] = arr[j - 1];
+    }
+    arr[i] = value;
     (*size)++;
 }
+
 
 int controlloPrime(int *primes, int n) {
     if(n==1) return 0;
@@ -65,7 +82,6 @@ int calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n,
         k = 1;
         do {
             a = (m * k) + notprimes[i];
-            k++;
             if (controlloPrime(primes, a)) {
                 if (ifNotExist(primes, i1, a)) {
                     inserisci_ordinato(primes, &i1, a);
@@ -76,6 +92,7 @@ int calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n,
             if (ifNotExist(notprimes, i2, a)) {
                 inserisci_ordinato(notprimes, &i2, a);
             }
+            k++;
         }while (a < limit);
     }
     return limit;
@@ -87,7 +104,7 @@ void findPrimes(int *primes, int *notprimes, int n) {
         m=calcolaFamiglie(primes,notprimes,m,&foundPrimes,n,i);
         i++;
     }
-    //printArray(primes,n);
+    printArray(primes,n);
     printf("%d\n",foundPrimes);
 }
 
