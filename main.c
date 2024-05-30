@@ -8,8 +8,6 @@ void printArray(int *a, int n) {
     printf("\n");
 }
 
-#include <stdlib.h>
-
 int binary_search(int *arr, int low, int high, int value) {
     while (low < high) {
         int mid = low + (high - low) / 2;
@@ -35,7 +33,7 @@ void inserisci_ordinato(int *arr, int *size, int value) {
 
 
 int controlloPrime(int *primes, int n) {
-    if(n==1) return 0;
+    if(n==1 || (n%2)==0) return 0;
     for(int i=0, iFinal=i1-1;i<iFinal;i++,iFinal--) {
         if((n%primes[i])==0 || (n%primes[iFinal])==0) return 0;
     }
