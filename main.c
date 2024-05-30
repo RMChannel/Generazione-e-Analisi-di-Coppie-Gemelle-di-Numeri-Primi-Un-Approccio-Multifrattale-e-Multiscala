@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define N 500000
+#define N 100000
 int i1=1, i2=1;
 
 void printArray(int *a, int n) {
@@ -23,8 +23,18 @@ int controlloPrime(int *primes, int n) {
     return 1;
 }
 
-int ifNotExist(int *primes, int max, int n) {
-    for(int i=0;i<max;i++) if(n==primes[i]) return 1;
+int ifNotExist(int *arr, int n, int target) {
+    int left = 0, right = n - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
     return 0;
 }
 
