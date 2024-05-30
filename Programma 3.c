@@ -33,9 +33,9 @@ long int calcolo(int regola, int x, int y) {
 }
 
 int controlloLeft(long int n, long long int *mat, int *righe, int regola, int x, int y) { //Questa funzione si occupa di fare il controllo (se il numero k dato è un numero primo o meno) sul lato sinistro della matrice
-    long int *m=(long int *)mat[(x-1)]; //Puntatore che punta alla riga data dalla funzione regola, così da posizionarsi sulla riga da dove occorre iniziare il controllo, in questo caso non avviene nessun controllo sulle righe perchè gia avvenuto nella prima regola
+    long long int *m=(long long int *)mat[(x-1)]; //Puntatore che punta alla riga data dalla funzione regola, così da posizionarsi sulla riga da dove occorre iniziare il controllo, in questo caso non avviene nessun controllo sulle righe perchè gia avvenuto nella prima regola
     while(1) {
-        if ((long int *)m[y-1]==NULL) m[y-1]=calcolo(regola,x,y); //Se il valore della matrice non esiste, allora viene calcolato e inserito nella matrice (se esiste già, non viene calcolato)
+        if ((long long int *)m[y-1]==NULL) m[y-1]=calcolo(regola,x,y); //Se il valore della matrice non esiste, allora viene calcolato e inserito nella matrice (se esiste già, non viene calcolato)
         k=m[y-1]; //Salva direttamente in k
         if (n==k) return 0; //Se viene trovato il k all'interno della matrice, allora il numero non è primo
         else if(n<k) { //Se n è minore del k calcolato
@@ -48,20 +48,20 @@ int controlloLeft(long int n, long long int *mat, int *righe, int regola, int x,
                 riallocazione(mat+x-1,righe); //Ne vengono allocate altre 100
                 }
             }
-        m=(long int *)mat[x-1]; //Cambio di riga sul puntatore della matrice
+        m=(long long int *)mat[x-1]; //Cambio di riga sul puntatore della matrice
     }
 }
 
 int controlloRight(long int n, long long int *mat, int *righe, int regola, int x, int y) { //Questa funzione si occupa di fare il controllo(se il numero k dato è un numero primo o meno) sul lato destro della matrice
-    long int *m=(long int *)mat[(x-1)]; //Puntatore che punta alla riga data dalla funzione regola, così da posizionarsi sulla riga da dove occorre iniziare il controllo, in questo caso non avviene nessun controllo sulle righe perchè gia avvenuto nella prima regola
+    long long int *m=(long long int *)mat[(x-1)]; //Puntatore che punta alla riga data dalla funzione regola, così da posizionarsi sulla riga da dove occorre iniziare il controllo, in questo caso non avviene nessun controllo sulle righe perchè gia avvenuto nella prima regola
     while(1) {
-        if ((long int *)m[y-1]==NULL) m[y-1]=calcolo(regola,x,y); //Se il valore della matrice non esiste viene calcolato e salvato nella matrice (se esiste già, semplicemente non viene calcolato)
+        if ((long long int *)m[y-1]==NULL) m[y-1]=calcolo(regola,x,y); //Se il valore della matrice non esiste viene calcolato e salvato nella matrice (se esiste già, semplicemente non viene calcolato)
         k=m[y-1]; //Salva direttamente in k
         if(n<k && x==1) return 1; //Nel caso in cui ci si trova sulla 1°riga e il numero che viene controllato è minore del k, allora vuol dire che il nostro numero è sicuramente primo
         else if (n>k) y++; //Nel caso in cui il numero sia maggiore di k, allora incrementa di colonna per scorrere in avanti
         else if(n<k && x!=1) { //Invece, nel caso in cui il numero è minore di k e non ci troviamo sulla 1°riga
             x--; //Spostamento di una riga più in alto
-            m=(long int *)mat[x-1]; //Viene aggiornato il puntatore della matrice
+            m=(long long int *)mat[x-1]; //Viene aggiornato il puntatore della matrice
         }
         else if (n==k) return 0; //Se viene trovato il k all'interno della matrice, allora il numero non è primo
     }
@@ -69,7 +69,7 @@ int controlloRight(long int n, long long int *mat, int *righe, int regola, int x
 
 int regola(long int n, long long int *mat, int *righe, int regola) { //Questa è la funzione che va a controllare in quale punto della diagonale si deve andare a cercare se è il numero è primo o meno 
     int x=1, y=1; //Inizializza le variabili di coordinate
-    long int *m=(long int *)mat[0]; //E viene inizializzato il puntatore alla 1°riga della matrice
+    long long int *m=(long long int *)mat[0]; //E viene inizializzato il puntatore alla 1°riga della matrice
     do {
         if ((long int *)m[y-1]==NULL) m[y-1]=calcolo(regola,x,y); //Se il valore della matrice non esiste, allora viene calcolato e salvato nella matrice (se esiste già, semplicemente non lo calcolo)
         k=m[y-1]; //Salva direttamente in k
@@ -78,7 +78,7 @@ int regola(long int n, long long int *mat, int *righe, int regola) { //Questa è
         if (x>(*righe)) { //Nel caso in cui non ci siano più righe allocate, ne vengono allocate altre
             riallocazione(mat+x-1,righe);
         }
-        m=(long int *)mat[x-1]; //Punto alla prossima riga
+        m=(long long int *)mat[x-1]; //Punto alla prossima riga
         y++; //Incremento anche la colonna(visto che dobbiamo scorrere sulla diagonale, vengono incrementati x e y contemporaneamente di 1 a 1)
     } while(n>k); //Il ciclo si ripete finché il k calcolato non è minore rispetto alla n che stiamo cercando
     return (controlloLeft(n,mat,righe,regola,x-1,y-1) && controlloRight(n,mat,righe,regola,x-1,y-1)); //Infine si effettua il controllo a sinistra e a destra della matrice, infatti se uno dei due restituisce che non è primo, allora non sarà primo, se invece tutte e due restituiscono che è primo, allora è sicuramente primo e restituisco che è primo
