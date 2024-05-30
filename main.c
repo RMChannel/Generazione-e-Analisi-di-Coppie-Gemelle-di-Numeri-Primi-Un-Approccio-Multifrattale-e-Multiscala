@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define N 10000
+#define N 200000
 int i1=1, i2=1;
 
 void printArray(int *a, int n) {
@@ -69,21 +69,21 @@ void calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n
 }
 
 void findPrimes(int *primes, int *notprimes, int n) {
-    int foundPrimes=1, m=1, i=0;
+    int foundPrimes=1, m=1, i=1;
     while(foundPrimes<n) {
-        m*=primes[i];
+        m*=primes[i-1];
         calcolaFamiglie(primes,notprimes,m,&foundPrimes,n,i);
-        printArray(primes,i1);
-        //printArray(notprimes,i2);
+        
         i++;
     }
 }
 
 int main() {
-    int *primes=malloc(sizeof(int)*N);
-    int *notprimes=malloc(sizeof(int)*N);
+    int *primes=calloc(N,sizeof(int));
+    int *notprimes=calloc(N,sizeof(int));
     notprimes[0]=4;
     primes[0]=2;
-    int n=1000;
+    int n=100;
     findPrimes(primes,notprimes,n);
+    printArray(primes,n);
 }
