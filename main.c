@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define N 100000
-int i1=1, i2=1;
+#define N 1000000
+long long int i1=1, i2=1;
 
-void printArray(int *a, int n) {
-    for(int i=0;i<n;i++) printf("%d ",a[i]);
+void printArray(long long int *a, long long int n) {
+    for(long long int i=0;i<n;i++) printf("%d ",a[i]);
     printf("\n");
 }
 
-void inserisci_ordinato(int *arr, int *size, int value) {
-    int i;
+void inserisci_ordinato(long long int *arr, long long int *size, long long int value) {
+    long long int i;
     for (i = *size - 1; (i >= 0 && arr[i] > value); i--) {
         arr[i + 1] = arr[i];
     }
@@ -17,16 +17,16 @@ void inserisci_ordinato(int *arr, int *size, int value) {
     (*size)++;
 }
 
-int controlloPrime(int *primes, int n) {
+long long int controlloPrime(long long int *primes, long long int n) {
     if(n==1) return 0;
-    for(int i=0;i<i1;i++) if((n%primes[i])==0) return 0;
+    for(long long int i=0;i<i1;i++) if((n%primes[i])==0) return 0;
     return 1;
 }
 
-int ifNotExist(int *arr, int n, int target) {
-    int left = 0, right = n - 1;
+long long int ifNotExist(long long int *arr, long long int n, long long int target) {
+    long long int left = 0, right = n - 1;
     while (left <= right) {
-        int mid = left + (right - left) / 2;
+        long long int mid = left + (right - left) / 2;
         if (arr[mid] == target) {
             return mid;
         } else if (arr[mid] < target) {
@@ -38,8 +38,8 @@ int ifNotExist(int *arr, int n, int target) {
     return 0;
 }
 
-void CalcoloFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n, int limit) {
-    int k, a, i;
+void CalcoloFamiglie(long long int *primes, long long int *notprimes, long long int m, long long int *foundPrimes, long long int n, long long int limit) {
+    long long int k, a, i;
 
     for (i = 0; notprimes[i] < m && i < i2; i++) {
         a = 0;
@@ -63,9 +63,9 @@ void CalcoloFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n
     }
 }
 
-void calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n, int i) {
-    int limit=m, first=1;
-     for(int a=0, b=0,k=1;(a<=limit && b<=limit);k++) {
+void calcolaFamiglie(long long int *primes, long long int *notprimes, long long int m, long long int *foundPrimes, long long int n, long long int i) {
+    long long int limit=m, first=1;
+     for(long long int a=0, b=0,k=1;(a<=limit && b<=limit);k++) {
         a=(m*k)+1;
         b=(m*k)-1;
         if(controlloPrime(primes,b)) {
@@ -88,8 +88,8 @@ void calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n
      CalcoloFamiglie(primes,notprimes,m,foundPrimes,n,limit);
 }
 
-void findPrimes(int *primes, int *notprimes, int n) {
-    int foundPrimes=1, m=1, i=1;
+void findPrimes(long long int *primes, long long int *notprimes, long long int n) {
+    long long int foundPrimes=1, m=1, i=1;
     while(foundPrimes<n) {
         m*=primes[i-1];
         calcolaFamiglie(primes,notprimes,m,&foundPrimes,n,i);
@@ -98,12 +98,12 @@ void findPrimes(int *primes, int *notprimes, int n) {
     }
 }
 
-int main() {
-    int *primes=malloc(N*sizeof(int));
-    int *notprimes=malloc(N*sizeof(int));
+long long int main() {
+    long long int *primes=malloc(N*sizeof(int));
+    long long int *notprimes=malloc(N*sizeof(int));
     notprimes[0]=4;
     primes[0]=2;
-    int n=1000;
+    long long int n=10000;
     findPrimes(primes,notprimes,n);
     printArray(primes,n);
 }
