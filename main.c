@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define N 200000
+#define N 500000
 int i1=1, i2=1;
 
 void printArray(int *a, int n) {
@@ -79,8 +79,8 @@ void findPrimes(int *primes, int *notprimes, int n) {
 }
 
 int main() {
-    int *primes=calloc(N,sizeof(int));
-    int *notprimes=calloc(N,sizeof(int));
+    int *primes=malloc(N*sizeof(int));
+    int *notprimes=malloc(N*sizeof(int));
     notprimes[0]=4;
     primes[0]=2;
     int n=1000;
