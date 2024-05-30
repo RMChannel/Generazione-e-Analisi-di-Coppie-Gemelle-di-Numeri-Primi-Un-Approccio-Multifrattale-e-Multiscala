@@ -8,7 +8,7 @@ int k; //Crea un'unica variabile k globale, così non doverla inizializzare e al
 //Questa funzione ha lo scopo di creare gli array incrementandoli di 100 in base alla necessità(corrispondono alle righe della matrice) 
 void riallocazione(long long int* mat, int *n) {
     for (int i=0;i<100;i++) {
-        mat[i]=malloc(N*sizeof(long int)); //Utilizzo la malloc, così da non sprecare memoria (spiegazione sotto)
+        mat[i]=(long long int)malloc(N*sizeof(long long int)); //Utilizzo la malloc, così da non sprecare memoria (spiegazione sotto)
     }
     (*n)+=100;//Incremento il numero di righe di 100, così da avere traccia di quante righe vengono calcolato
 }
@@ -32,7 +32,7 @@ long int calcolo(int regola, int x, int y) {
     }
 }
 
-int controlloLeft(long int n, long int *mat, int *righe, int regola, int x, int y) { //Questa funzione si occupa di fare il controllo (se il numero k dato è un numero primo o meno) sul lato sinistro della matrice
+int controlloLeft(long int n, long long int *mat, int *righe, int regola, int x, int y) { //Questa funzione si occupa di fare il controllo (se il numero k dato è un numero primo o meno) sul lato sinistro della matrice
     long int *m=(long int *)mat[(x-1)]; //Puntatore che punta alla riga data dalla funzione regola, così da posizionarsi sulla riga da dove occorre iniziare il controllo, in questo caso non avviene nessun controllo sulle righe perchè gia avvenuto nella prima regola
     while(1) {
         if ((long int *)m[y-1]==NULL) m[y-1]=calcolo(regola,x,y); //Se il valore della matrice non esiste, allora viene calcolato e inserito nella matrice (se esiste già, non viene calcolato)
@@ -52,7 +52,7 @@ int controlloLeft(long int n, long int *mat, int *righe, int regola, int x, int 
     }
 }
 
-int controlloRight(long int n, long int *mat, int *righe, int regola, int x, int y) { //Questa funzione si occupa di fare il controllo(se il numero k dato è un numero primo o meno) sul lato destro della matrice
+int controlloRight(long int n, long long int *mat, int *righe, int regola, int x, int y) { //Questa funzione si occupa di fare il controllo(se il numero k dato è un numero primo o meno) sul lato destro della matrice
     long int *m=(long int *)mat[(x-1)]; //Puntatore che punta alla riga data dalla funzione regola, così da posizionarsi sulla riga da dove occorre iniziare il controllo, in questo caso non avviene nessun controllo sulle righe perchè gia avvenuto nella prima regola
     while(1) {
         if ((long int *)m[y-1]==NULL) m[y-1]=calcolo(regola,x,y); //Se il valore della matrice non esiste viene calcolato e salvato nella matrice (se esiste già, semplicemente non viene calcolato)
@@ -67,7 +67,7 @@ int controlloRight(long int n, long int *mat, int *righe, int regola, int x, int
     }
 }
 
-int regola(long int n, long int *mat, int *righe, int regola) { //Questa è la funzione che va a controllare in quale punto della diagonale si deve andare a cercare se è il numero è primo o meno 
+int regola(long int n, long long int *mat, int *righe, int regola) { //Questa è la funzione che va a controllare in quale punto della diagonale si deve andare a cercare se è il numero è primo o meno 
     int x=1, y=1; //Inizializza le variabili di coordinate
     long int *m=(long int *)mat[0]; //E viene inizializzato il puntatore alla 1°riga della matrice
     do {
@@ -84,7 +84,7 @@ int regola(long int n, long int *mat, int *righe, int regola) { //Questa è la f
     return (controlloLeft(n,mat,righe,regola,x-1,y-1) && controlloRight(n,mat,righe,regola,x-1,y-1)); //Infine si effettua il controllo a sinistra e a destra della matrice, infatti se uno dei due restituisce che non è primo, allora non sarà primo, se invece tutte e due restituiscono che è primo, allora è sicuramente primo e restituisco che è primo
 }
 
-int isPrime(long int n, int controllo, long int *mat1, long int *mat2, long int *mat3, int *righe1, int *righe2, int *righe3) { //Questa funzione va a richiamare la funzione di controllo con i parametri corretti a seconda della regola che si vuole utilizzare
+int isPrime(long int n, int controllo, long long int *mat1, long long int *mat2, long long int *mat3, int *righe1, int *righe2, int *righe3) { //Questa funzione va a richiamare la funzione di controllo con i parametri corretti a seconda della regola che si vuole utilizzare
     if (controllo==1) return regola(n,mat1,righe1,1); //Se è un valore k dei 6k-1, allora fa il controllo solo su regola 1
     else return (regola(n,mat2,righe2,2) && regola(n,mat3,righe3,3)); //Se è un valore k dei 6k+1, allora fa il controllo su regola 2 e regola 3
     //Se tutte e due restituiscono che è un numero primo, allora restituisce che è primo, altrimenti se una delle due restituisce che il numero non è primo, allora restituisce che non è primo
