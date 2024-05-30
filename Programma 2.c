@@ -4,7 +4,7 @@
 #define N 500000
 
 //Questa funzione ha lo scopo di creare gli array (a 100 a 100) che corrispondono alle righe
-void riallocazione(long long int* mat, int *n) {
+void riallocazione(long long int** mat, int *n) {
     for (int i=0;i<100;i++) {
         mat[i]=malloc(N*sizeof(long int)); //Utilizzo la malloc, così da non sprecare memoria (spiegazione alla fine del codice)*
     }
@@ -43,7 +43,7 @@ int regola(long long int n, long long int *mat, int *righe, int regola) { //Ques
             y=1; //Si riposiziona sulla prima colonna
             x++; //Cambio riga
             if (x>(*righe)) { //Nel caso si superino il numero di righe già create
-                riallocazione(mat+x-1,righe); //Ne vengono allocate altre 100
+                riallocazione((long long int **)(mat+x-1),righe); //Ne vengono allocate altre 100
             }
             m=(long long int *)mat[x-1]; //Cambio di riga sul puntatore della matrice
         }
@@ -73,9 +73,9 @@ void createCandidate(long long int c1[], long long int n) {
     int righe1=0;
     int righe2=0; //Utilizza delle variabili intere che tengono traccia di quante righe sono state effettivamente create (così da evitare di andare fuori memoria ed avere un segmentation fault)
     int righe3=0;
-    riallocazione(mat1,&righe1);
-    riallocazione(mat2,&righe2); //Vengono create le prime 100 righe di ogni matrice
-    riallocazione(mat3,&righe3);
+    riallocazione((long long int **)mat1,&righe1);
+    riallocazione((long long int **)mat2,&righe2); //Vengono create le prime 100 righe di ogni matrice
+    riallocazione((long long int **)mat3,&righe3);
     for(long long int ki=1, flag, i1=0, i2=1;i2<=n; ki++) { //Ora inizia il calcolo effettivo dei numeri primi, mi fermo quando il numero di coppie trovate arriva a quello richiesto dall'utente
         flag=0; //Questa variabile controlla se è stato trovato almeno un numero primo dai 6k-1 e dai 6k+1
         if(isPrime(ki,1,mat1,mat2,mat3,&righe1,&righe2,&righe3)) { //Controlla che il k dato corrisponde ad un numero primo per la regola dei 6k-1
@@ -108,9 +108,9 @@ void createCandidateForK(long long int c1[], int ki, int kf) {
     int righe1=0;
     int righe2=0; //Utilizza delle variabili intere che mi tengono traccia di quante righe sono state effettivamente create (così da evitare di andare fuori memoria ed avere un segmentation fault)
     int righe3=0;
-    riallocazione(mat1,&righe1);
-    riallocazione(mat2,&righe2); //Vengono create le prime 100 righe di ogni matrice
-    riallocazione(mat3,&righe3);
+    riallocazione((long long int **)mat1,&righe1);
+    riallocazione((long long int **)mat2,&righe2); //Vengono create le prime 100 righe di ogni matrice
+    riallocazione((long long int **)mat3,&righe3);
     for(;((ki)%6)!=0;ki++); //Calcola i k corrispondenti ai numeri dati facendo la formula inversa
     for(;((kf)%6)!=0;kf--);
     ki/=6;
