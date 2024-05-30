@@ -1,3 +1,5 @@
 *.exe
+*.out
 v2.c
 output.txt
+output4.txt

@@ -190,7 +190,7 @@ void findPrimes(int n) {
         m=calcolaFamiglie(primes,notprimes,m,&foundPrimes,n,i,fp,inizio);
         i++;
     }
-    printArray(primes,n); //Stampo tutto
+    //printArray(primes,n); //Stampo tutto
 }
 
 /*
