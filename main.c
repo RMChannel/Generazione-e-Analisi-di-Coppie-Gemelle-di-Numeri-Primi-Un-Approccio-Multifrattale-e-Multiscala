@@ -59,7 +59,7 @@ void calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n
             if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
             (*foundPrimes)++;
         }
-        else if(ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
+        else if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
         if(first) {
             limit*=primes[i];
             first=0;
@@ -83,7 +83,7 @@ int main() {
     int *notprimes=calloc(N,sizeof(int));
     notprimes[0]=4;
     primes[0]=2;
-    int n=100;
+    int n=1000;
     findPrimes(primes,notprimes,n);
     printArray(primes,n);
 }
