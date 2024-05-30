@@ -1,96 +1,89 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
+#define N 10000
+int i1=1, i2=1;
 
-
-
-int myAtoi(char *s) {
-    int n=0;
-    for(;*s;s++) {
-        if(*s<'0' || *s>'9') {
-            fprintf(stderr,"Uno degli argomenti non è un numero");
-            exit(EXIT_FAILURE);
-        }
-        n=(n*10)+((*s)-'0');
-    }
-    return n;
+void printArray(int *a, int n) {
+    for(int i=0;i<n;i++) printf("%d ",a[i]);
+    printf("\n");
 }
 
-void calcolaFamiglie(List primes, List notPrimes, int m, int *foundPrimes, int n, int i) {
+void inserisci_ordinato(int arr[], int *n, int key) {
+    int i;
+    for (i=(*n)-1; (i >= 0 && arr[i] > key); i--)
+        arr[i+1] = arr[i];
+
+    arr[i+1] = key;
+    (*n)++;
+}
+
+int controlloPrime(int *primes, int n) {
+    if(n==1) return 0;
+    for(int i=0;i<i1;i++) if((n%primes[i])==0) return 0;
+    return 1;
+}
+
+int ifNotExist(int *primes, int max, int n) {
+    for(int i=0;i<max;i++) if(n==primes[i]) return 1;
+    return 0;
+}
+
+void CalcoloFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n, int limit) {
+    int k;
+    for(int a=0, i=0;notprimes[i]<m && i<i2;a=0,i++) {
+        for(k=1;a<limit;k++) {
+            a=(m*k)+notprimes[i];
+            if(controlloPrime(primes,a)) {
+                inserisci_ordinato(primes,&i1,a);
+                if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
+                (*foundPrimes)++;
+            }
+            else if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
+        }
+    }
+}
+
+void calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n, int i) {
     int limit=m, first=1;
-    for(int a=0, b=0,k=1,n=m*k;(a<=limit && b<=limit);k++,n=m*k) {
-        a=n+1;
-        b=n-1;
-        if (controlPrime(primes,b)) {
-            addListOrd(primes,b);   
-            if(ifExist(notPrimes,b)) addListOrd(notPrimes,b);
+     for(int a=0, b=0,k=1;(a<=limit && b<=limit);k++) {
+        a=(m*k)+1;
+        b=(m*k)-1;
+        if(controlloPrime(primes,b)) {
+            inserisci_ordinato(primes,&i1,b);
+            if(!ifNotExist(notprimes,i2,b)) inserisci_ordinato(notprimes,&i2,b);
             (*foundPrimes)++;
         }
-        else if(ifExist(notPrimes,b)) addListOrd(notPrimes,b);
-        if (controlPrime(primes,a)) {
-            addListOrd(primes,a);
-            if(ifExist(notPrimes,a)) addListOrd(notPrimes,a);
+        else if(ifNotExist(notprimes,i2,b)) inserisci_ordinato(notprimes,&i2,b);
+        if(controlloPrime(primes,a)) {
+            inserisci_ordinato(primes,&i1,a);
+            if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
             (*foundPrimes)++;
         }
-        else if(ifExist(notPrimes,a)) addListOrd(notPrimes,a);
+        else if(ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
         if(first) {
-                limit*=getNext(primes,i);
-                first=0;
+            limit*=primes[i];
+            first=0;
         }
-    }
-    CalcoloFamiglie(primes,notPrimes,m,foundPrimes,n,limit);
+     }
+     CalcoloFamiglie(primes,notprimes,m,foundPrimes,n,limit);
 }
 
-void findPrimes(int n, int n2) {
-    List primes=newList();
-    List notPrimes=newList();
-    addListTail(primes,2);
-    addListTail(primes,3);
-    int foundPrimes=1, m, i=1;
-    if(n2==0) {
-        while(foundPrimes<n) {
-            calcolaM(primes,i,&m);
-            calcolaFamiglie(primes,notPrimes,m,&foundPrimes,n,i);
-            i++;
-        }
-        printList(primes,n);
-        printf("%d\n",foundPrimes);
-    }
-    else if (n2==-1) {
-        while(foundPrimes<(n*5)) {
-            calcolaM(primes,i,&m);
-            calcolaFamiglie(primes,notPrimes,m,&foundPrimes,n*5,i);
-            i++;
-        }
-        findCoppie(primes,n);
-    }
-    else {
-        while(foundPrimes<n2) {
-            calcolaM(primes,i,&m);
-            calcolaFamiglie(primes,notPrimes,m,&foundPrimes,n2,i);
-            i++;
-        }
-        printListFromTo(primes,n,n2);
+void findPrimes(int *primes, int *notprimes, int n) {
+    int foundPrimes=1, m=1, i=0;
+    while(foundPrimes<n) {
+        m*=primes[i];
+        calcolaFamiglie(primes,notprimes,m,&foundPrimes,n,i);
+        printArray(primes,i1);
+        //printArray(notprimes,i2);
+        i++;
     }
 }
 
-int main(int argc, char *argv[]) {
-    if(argc<3 || argc>4) {
-        fprintf(stderr,"Uso corretto:\n./a.out n-primi\n");
-        exit(EXIT_FAILURE);
-    }
-    switch(argv[1][0]) {
-        case '1':
-            findPrimes(myAtoi(argv[2]),0);
-            break;
-        case '2':
-            findPrimes(myAtoi(argv[2]),myAtoi(argv[3]));
-            break;
-        case '3':
-            findPrimes(myAtoi(argv[2]),-1);
-            break;
-        default:
-            fprintf(stderr,"Uso corretto:\n./a.out n-primi\n");
-            exit(EXIT_FAILURE);
-    }
+int main() {
+    int *primes=malloc(sizeof(int)*N);
+    int *notprimes=malloc(sizeof(int)*N);
+    notprimes[0]=4;
+    primes[0]=2;
+    int n=1000;
+    findPrimes(primes,notprimes,n);
 }
