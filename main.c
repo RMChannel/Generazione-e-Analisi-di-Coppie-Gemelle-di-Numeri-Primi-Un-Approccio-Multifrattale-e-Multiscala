@@ -9,6 +9,7 @@ void printArray(int *a, int n) {
 }
 
 int binary_search(int *arr, int low, int high, int value) {
+    if(value>arr[high-1]) return high;
     while (low < high) {
         int mid = low + (high - low) / 2;
         if (arr[mid] == value) {
@@ -107,7 +108,7 @@ void findPrimes(int *primes, int *notprimes, int n) {
 }
 
 int main() {
-    int n=10000;
+    int n=1000;
     size_t size=N*sizeof(int);
     int *primes=malloc(size);
     int *notprimes=malloc(size);
