@@ -43,6 +43,7 @@ int ifNotExist(int *arr, int n, int target) {
 int calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n, int i) {
     int limit=m, first=1;
     int a,b,k,control;
+    int nexa;
      for(a=0,b=0,k=1,n=m*k;(a<=limit && b<=limit);k++) {
         b=(m*k)-1;
         if(controlloPrime(primes,b)) {
@@ -51,12 +52,13 @@ int calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n,
             (*foundPrimes)++;
         }
         a=(m*k)+1;
+        nexa = ifNotExist(notprimes,i2,a);
         if(controlloPrime(primes,a)) {
             inserisci_ordinato(primes,&i1,a);
-            if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
+            if(!nexa) inserisci_ordinato(notprimes,&i2,a);
             (*foundPrimes)++;
         }
-        else if(!ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
+        else if(!nexa) inserisci_ordinato(notprimes,&i2,a);
         if(first) {
             limit*=primes[i];
             first=0;
@@ -98,7 +100,7 @@ int main() {
     int *notprimes=malloc(N*sizeof(int));
     notprimes[0]=4;
     primes[0]=2;
-    int n=10000;
+    int n=1000;
     findPrimes(primes,notprimes,n);
     free(primes);
     free(notprimes);
