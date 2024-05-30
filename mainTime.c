@@ -20,7 +20,13 @@ int myAtoi(char *s) {
     return n;
 }
 
+//Funzione che stampa l'intero array su terminale
 void printArray(int *a, int n) {
+    for(int i=0;i<n;i++) printf("%d ",a[i]);
+    printf("\n");
+}
+
+void printFileArray(int *a, int n) {
     for(int i=0;i<n;i++) printf("%d ",a[i]);
     printf("\n");
 }
@@ -119,19 +125,24 @@ i limiti di iterazione e per determinare se un numero è primo o meno, aggiungen
 agli array appropriati.
 */
 
-int calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n, int i) {
+int calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n, int i, FILE *fp, clock_t inizio) {
     int limit=m, first=1, a, b, k; //Imposta limite ad m e first viene iniziallizato ad 1
-     for(a=0,b=0,k=1,n=m*k;(a<=limit && b<=limit);k++,n=m*k) { // il ciclo termina quando o a o b o entrambi superano il limite
+    clock_t fine;
+    for(a=0,b=0,k=1,n=m*k;(a<=limit && b<=limit);k++,n=m*k) { // il ciclo termina quando o a o b o entrambi superano il limite
         b=n-1; //In n si trova m*k e con esso calcola sia a che b
         if(controlloPrime(primes,b)) { //Controlla che b sia un numero primo
             inserisci_ordinato(primes,&i1,b); //Nel caso lo sia, viene inserito in primes in modo ordinato
             if(ifNotExist(notprimes,i2,b)) inserisci_ordinato(notprimes,&i2,b); //E nel caso non esista in notprimes, allora viene aggiunto anche lì (visto che i controlli li facciamo in modo univoco con un unico array)
             (*foundPrimes)++; //Il numero di numeri primi trovati viene incrementato
+            fine=clock();
+            fprintf(fp,"Numero primo: %d T: %f\n",*foundPrimes,(((double) (fine - inizio)) / CLOCKS_PER_SEC)); //Stampa su file il tempo
         }
         a=n+1;
         if(controlloPrime(primes,a)) { //Controlla che a sia un numero primo
             inserisci_ordinato(primes,&i1,a); //Nel caso lo sia, viene inserito in primes in modo ordinato
             (*foundPrimes)++; //Il numero di numeri primi trovati viene incrementato
+            fine=clock();
+            fprintf(fp,"Numero primo: %d T: %f\n",*foundPrimes,(((double) (fine - inizio)) / CLOCKS_PER_SEC)); //Stampa su file il tempo
         }
         if(ifNotExist(notprimes,i2,a)) inserisci_ordinato(notprimes,&i2,a);
         if(first) { //Il limite viene moltplicato col numero primo successivo, così che troviamo l'effettivo limite
@@ -147,6 +158,8 @@ int calcolaFamiglie(int *primes, int *notprimes, int m, int *foundPrimes, int n,
                 if (ifNotExist(primes, i1, a)) { //Se si e non si trova in primes
                     inserisci_ordinato(primes, &i1, a); //Allora viene aggiunto
                     (*foundPrimes)++; //E il numero di numeri primi trovati ivene incrementato
+                    fine=clock();
+                    fprintf(fp,"Numero primo: %d T: %f\n",*foundPrimes,(((double) (fine - inizio)) / CLOCKS_PER_SEC)); //Stampa su file il tempo
                 }
             } 
             if (ifNotExist(notprimes, i2, a)) { //Se non si trova in notprimes
@@ -164,6 +177,9 @@ e passa i valori ad calcolaFamiglie.
 */
 
 void findPrimes(int n) {
+    FILE *fp;
+    fp=fopen("output.txt","w");
+    clock_t inizio, fine;
     size_t size=N*sizeof(int);
     int *primes=malloc(size); //Array dove verrano salvati i numeri primi
     int *notprimes=malloc(size); //Array dove verrano salvati i numeri NON primi
@@ -171,7 +187,7 @@ void findPrimes(int n) {
     primes[0]=2; //Inizializza solo un valore
     int foundPrimes=1, m=2, i=1;
     while(foundPrimes<n) { //Cicla finché il numero di numeri primi trovati non supera quello richiesto
-        m=calcolaFamiglie(primes,notprimes,m,&foundPrimes,n,i);
+        m=calcolaFamiglie(primes,notprimes,m,&foundPrimes,n,i,fp,inizio);
         i++;
     }
     printArray(primes,n); //Stampo tutto
@@ -188,6 +204,9 @@ Infine, libera la memoria allocata per gli array.
 */
 
 void findCoppie(int n) {
+    FILE *fp;
+    fp=fopen("output.txt","w");
+    clock_t inizio, fine;
     size_t size=N*sizeof(int);
     int *primes=malloc(size); //Array dove verrano salvati i numeri primi
     int *notprimes=malloc(size); //Array dove verrano salvati i numeri NON primi
@@ -195,7 +214,7 @@ void findCoppie(int n) {
     primes[0]=2; //Inizializza solo un valore
     int foundPrimes=1, m=2, i=1;
     while(foundPrimes<(n*5)) {
-        m=calcolaFamiglie(primes,notprimes,m,&foundPrimes,n*5,i); //Avvia il calcolo, calcolando il tanti numeri primi quanto il quintuplo del numero di coppie richieste
+        m=calcolaFamiglie(primes,notprimes,m,&foundPrimes,n,i,fp,inizio); //Avvia il calcolo, calcolando il tanti numeri primi quanto il quintuplo del numero di coppie richieste
         i++;
     }
     for(int i1=0, i2, i3=1;i3<=n;i1=i2) { //i1 rappresenta il 1°numero, i2 il 2°numero e i3 il conto delle coppie trovate
