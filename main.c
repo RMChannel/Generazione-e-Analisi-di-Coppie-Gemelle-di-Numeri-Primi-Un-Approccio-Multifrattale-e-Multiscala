@@ -76,6 +76,11 @@ void addFound(int *iFound, int found[], int k) {
     }
 }
 
+void printArray(int a[], int n) {
+    for(int i=0;i<n;i++) printf("%d ",a[i]);
+    printf("\n");
+}
+
 int main() {
     int H, found[200000], jMax;
     found[0]=3;
@@ -97,5 +102,6 @@ int main() {
         kGen+=2;
         k++;
     }
-    printFounded(found,iFound);
+    //printFounded(found,iFound);
+    printArray(found,iFound);
 }
